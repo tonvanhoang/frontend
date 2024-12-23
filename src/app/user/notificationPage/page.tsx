@@ -55,7 +55,7 @@ export default function Notification(){
           <div className="item" style={{ marginBottom: "100px" }}>
             <h3>Thông báo</h3>
             <div className="homnay">
-              <h6>Hôm nay</h6>
+              {/* <h6>Hôm nay</h6> */}
               {
                 noti.map((no:any)=>(
                   <div className="gachaffter">
@@ -87,81 +87,6 @@ export default function Notification(){
                 ))
               }
            
-            </div>
-            <div className="truocdo">
-              <h6>Trước đó</h6>
-              <div className="gachaffter">
-                <div className="thongbaocon">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="content">
-                    <span
-                      ><a href="#">Hoangton</a>đã yêu thích bài viết của bạn ❤️
-                      heheheeehehe eheehehhheheh eheeh ehhe hehee</span>
-                  </div>
-                </div>
-              </div>
-              <div className="gachaffter">
-                <div className="thongbaocon">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="content">
-                    <span
-                      ><a href="#">Hoangton</a>đã yêu thích bài viết của bạn ❤️
-                      heheheeehehe eheehehhheheh eheeh ehhe hehee</span>
-                  </div>
-                </div>
-              </div>
-              <div className="gachaffter">
-                <div className="thongbaocon">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="content">
-                    <span
-                      ><a href="#">Hoangton</a>đã yêu thích bài viết của bạn ❤️
-                      heheheeehehe eheehehhheheh eheeh ehhe hehee</span>
-                  </div>
-                </div>
-              </div>
-              <div className="gachaffter">
-                <div className="thongbaocon">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="content">
-                    <span
-                      ><a href="#">Hoangton</a>đã yêu thích bài viết của bạn ❤️
-                      heheheeehehe eheehehhheheh eheeh ehhe hehee</span>
-                  </div>
-                </div>
-              </div>
-              <div className="gachaffter">
-                <div className="thongbaocon">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="content">
-                    <span
-                      ><a href="#">Hoangton</a>đã yêu thích bài viết của bạn ❤️
-                      heheheeehehe eheehehhheheh eheeh ehhe hehee</span>
-                  </div>
-                </div>
-              </div>
-              <div className="gachaffter">
-                <div className="thongbaocon">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="content">
-                    <span
-                      ><a href="#">Hoangton</a>đã yêu thích bài viết của bạn ❤️
-                      heheheeehehe eheehehhheheh eheeh ehhe hehee</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

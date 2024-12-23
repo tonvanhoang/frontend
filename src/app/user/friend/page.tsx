@@ -8,7 +8,6 @@ interface User {
   lastName: string;
   avata: string;
 }
-
 export default function Friend(){
   const [Accounts, setAccount] = useState<any>([])
   useEffect(() => {
@@ -26,7 +25,6 @@ export default function Friend(){
         containerFriend.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
       });
     }
-    // Cleanup the event listeners on component unmount
     return () => {
       if (nextFriendBtn) {
         nextFriendBtn.removeEventListener('click', () => {

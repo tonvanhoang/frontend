@@ -15,11 +15,11 @@ interface LoginFormValues {
 interface LoginResponse {
   token: string;
   user: {
-    _id:string;
+    _id: string;
     email: string;
     firstName: string;
     lastName: string;
-    avata:string
+    avata: string;
   };
 }
 
@@ -27,26 +27,31 @@ interface ErrorResponse {
   message: string;
 }
 
+interface HelpRequestFormValues {
+  email: string;
+  content: string; // Reason for unlock request
+  image: File | null;
+}
+
 export default function Login() {
   const router = useRouter();
   const [lockedOut, setLockedOut] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loginAttempts, setLoginAttempts] = useState<number>(0);
+  const [showHelpModal, setShowHelpModal] = useState<boolean>(false);
 
-  // Load login attempts from localStorage on component mount
   useEffect(() => {
     const attempts = Number(localStorage.getItem('loginAttempts')) || 0;
     setLoginAttempts(attempts);
   }, []);
 
-  // Automatically unlock the form after 5 minutes (300 seconds)
   useEffect(() => {
     if (lockedOut) {
       const unlockTimer = setTimeout(() => {
         setLockedOut(false);
-        setLoginAttempts(0); // Reset login attempts after lockout period
+        setLoginAttempts(0);
         localStorage.removeItem('loginAttempts');
-      }, 300000); // 5 minutes
+      }, 300000); // Lockout for 5 minutes
 
       return () => clearTimeout(unlockTimer);
     }
@@ -88,13 +93,14 @@ export default function Login() {
 
         const data: LoginResponse = await res.json();
         
-        // Lưu token và thông tin người dùng vào localStorage
+        // Save token and user information to localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         
         handleLoginAttempt(0); // Reset attempts on successful login
         router.push('/user/homePage');
         alert('Đăng Nhập thành công!');
+
         setLoginError(null); // Clear any previous error messages
       } catch (error: any) {
         handleLoginAttempt(loginAttempts + 1);
@@ -109,7 +115,47 @@ export default function Login() {
     },
   });
 
-  // Auto-clear login errors after 5 seconds
+  const helpFormik = useFormik<HelpRequestFormValues>({
+    initialValues: {
+      email: '',
+      content: '',  
+      image: null,  
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email('Email không hợp lệ').required('Bắt buộc'),
+      content: Yup.string().required('Nội dung không được bỏ trống'), 
+    }),
+    onSubmit: async (values) => {
+      const unlockRequestPayload = {
+        email: values.email,
+        reason: values.content, 
+        imageUrl: values.image ? URL.createObjectURL(values.image) : null, 
+      };
+
+      try {
+        const res = await fetch('http://localhost:4000/account/requestUnlock', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(unlockRequestPayload), 
+        });
+
+        if (!res.ok) {
+          const errorData: ErrorResponse = await res.json();
+          throw new Error(errorData.message || 'Đã xảy ra lỗi khi gửi yêu cầu trợ giúp.');
+        }
+
+        const data = await res.json();
+        
+        alert('Yêu cầu mở khóa đã được gửi thành công!');
+        setShowHelpModal(false); 
+      } catch (error: any) {
+        alert(error.message || 'Đã xảy ra lỗi khi gửi yêu cầu trợ giúp.');
+      }
+    },
+  });
+
   useEffect(() => {
     if (loginError) {
       const errorTimeout = setTimeout(() => {
@@ -197,15 +243,28 @@ export default function Login() {
                 )}
 
                 <div className="quenmatkhau m-auto">
+                  <button
+                    type="button"
+                    onClick={() => setShowHelpModal(true)}
+                  >
+                    Trợ Giúp
+                  </button>
                   <a href="#/" className="text-decoration-none">
                     Quên mật khẩu?
                   </a>
                 </div>
 
                 <div className="text-center btnLogin">
-                  <button type="submit" disabled={formik.isSubmitting || lockedOut}>
-                    <a href="" className='text-decoration-none'>Đăng Nhập</a>
-                  </button>
+                  <button
+                  type="submit"
+                  disabled={formik.isSubmitting || lockedOut}
+                  style={{
+                    color: 'white',        
+                    fontWeight: 'bold',    
+                  }}
+                >
+                  Đăng Nhập
+                </button>
                 </div>
               </div>
             </form>
@@ -222,7 +281,7 @@ export default function Login() {
               </button>
             </div>
             <div className="my-3 item-4">
-              <button className="">
+              <button>
                 <div className="img">
                   <img src="../img/facebook.avif" alt="" />
                 </div>
@@ -240,6 +299,64 @@ export default function Login() {
           </div>
         </div>
       </div>
+
+      {/* Modal for Help Request */}
+{showHelpModal && (
+  <div className="modal" style={{ display: 'block' }}>
+    <div className="modal-content">
+      <span className="close" onClick={() => setShowHelpModal(false)}>&times;</span>
+      <h2>Yêu cầu mở khóa tài khoản</h2>
+      <form onSubmit={helpFormik.handleSubmit}>
+        <div className="mb-2">
+          <label>Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Vui lòng nhập email của bạn..."
+            value={helpFormik.values.email}
+            onChange={helpFormik.handleChange}
+            onBlur={helpFormik.handleBlur}
+            className={helpFormik.touched.email && helpFormik.errors.email ? 'is-invalid' : ''}
+          />
+          {helpFormik.touched.email && helpFormik.errors.email && (
+            <div className="text-danger">{helpFormik.errors.email}</div>
+          )}
+        </div>
+
+        <div className="mb-2">
+          <label>Lý do yêu cầu mở khóa</label>
+          <textarea
+            id="content" // Make sure the id matches the key in the form values
+            placeholder="Mô tả lý do yêu cầu mở khóa..."
+            value={helpFormik.values.content}
+            onChange={helpFormik.handleChange}
+            onBlur={helpFormik.handleBlur}
+            className={helpFormik.touched.content && helpFormik.errors.content ? 'is-invalid' : ''}
+          />
+          {helpFormik.touched.content && helpFormik.errors.content && (
+            <div className="text-danger">{helpFormik.errors.content}</div>
+          )}
+        </div>
+
+        <div className="mb-2">
+          <label>Hình ảnh minh họa (tuỳ chọn)</label>
+          <input
+            type="file"
+            id="image"
+            onChange={(event) => helpFormik.setFieldValue('image', event.currentTarget.files?.[0] || null)}
+          />
+        </div>
+
+        <div className="text-center">
+          <button type="submit" disabled={helpFormik.isSubmitting}>
+            Gửi yêu cầu
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
     </>
   );
 }

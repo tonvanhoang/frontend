@@ -1,42 +1,67 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 interface Video {
-  _id: string; // Unique identifier for the video
-  video: string; // Video URL
-  title: string; // Title of the reel
-  content?: string; // Optional content
-  dateReel: string; // Date of the reel
-  idAccount: string; // Account ID
+  _id: string;
+  video: string;
+  title: string;
+  content?: string;
+  dateReel: string;
+  idAccount: string;
 }
 
 interface ReelGridProps {
   onReelClick: (video: Video) => void;
-  videos: Video[]; // Accept videos as a prop
+  videos: Video[];
 }
 
 const ReelGrid: React.FC<ReelGridProps> = ({ onReelClick, videos }) => {
+  // Tạo ref cho mỗi video để xử lý thumbnail
+  const videoRefs = useRef<{ [key: string]: HTMLVideoElement }>({});
+
+  useEffect(() => {
+    // Xử lý tạo thumbnail cho mỗi video
+    videos.forEach((video) => {
+      if (videoRefs.current[video._id]) {
+        const videoElement = videoRefs.current[video._id];
+        // Seek đến giây đầu tiên để lấy thumbnail
+        videoElement.currentTime = 0.1;
+      }
+    });
+  }, [videos]);
+
   return (
-    <div id="containerReels">
+    <div id="containerReels" style={{ display: 'block' }}>
       <div className="childReels">
-        {videos.map((video) => (
-          <div
-            key={video._id} // Use _id as the key
-            className="item"
-            onClick={() => onReelClick(video)}
-          >
-            <video controls>
-              {" "}
-              {/* Thêm controls để kiểm tra video */}
-              <source src={video.video} type="video/mp4" />{" "}
-              {/* Use video URL */}
-            </video>
-            <span>
-              <i className="bi bi-play-fill"></i>
-              {/* Display views if available, else display a placeholder */}
-              {video.content ? `${video.content} N` : "0 N"}
-            </span>
-          </div>
-        ))}
+        {videos && videos.length > 0 ? (
+          videos.map((video) => (
+            <div
+              key={video._id}
+              className="item"
+              onClick={() => onReelClick(video)}
+            >
+              <video 
+                ref={(el) => {
+                  if (el) videoRefs.current[video._id] = el;
+                }}
+                preload="metadata"
+                muted
+                playsInline
+              >
+                <source src={video.video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <div className="video-overlay">
+                <i className="bi bi-play-circle"></i>
+              </div>
+              <span>
+                <i className="bi bi-play-fill"></i>
+                {video.content ? `${video.content} N` : "0 N"}
+              </span>
+            </div>
+          ))
+        ) : (
+          <p>No videos available</p>
+        )}
       </div>
     </div>
   );

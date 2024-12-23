@@ -56,7 +56,96 @@ nav {
   nav .container_ul ul li:hover {
     background-color: #eeeeee;
   }
-  
+  /* Quản lí menu và sub-menu */
+.menu-admin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px;
+  color: #333;
+  border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s;
+  width: 100%;
+  justify-content: space-between;
+  background-color: #fff; /* Thêm nền trắng để menu nhìn gọn gàng hơn */
+}
+
+.menu-admin:hover {
+  background-color: #eeeeee;
+  color: #0056b3; /* Màu chữ khi rê chuột vào */
+}
+
+/* Đảm bảo icon và tên menu không bị chồng lên nhau */
+.menu-admin > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Sub-menu */
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 0; /* Căn chỉnh với menu cha */
+  left: 100%; /* Đưa sub-menu sang bên phải của menu cha */
+  margin-left: 10px; /* Khoảng cách giữa menu cha và sub-menu */
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  padding: 10px 0;
+  border-radius: 8px;
+  z-index: 1000;
+  min-width: 200px; /* Đảm bảo độ rộng tối thiểu */
+}
+
+/* Khi hover vào menu-admin, sub-menu sẽ hiển thị */
+.menu-admin:hover .sub-menu {
+  display: block;
+}
+
+/* Mỗi item trong sub-menu */
+.sub-menu li {
+  padding: 10px 15px;
+  color: #333;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+/* Hover vào từng item trong sub-menu */
+.sub-menu li:hover {
+  background-color: #eeeeee;
+  color: #0056b3;
+}
+
+/* Icon và khoảng cách trong sub-menu */
+.sub-menu li i {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+/* Đảm bảo layout đẹp khi menu admin được hover */
+.menu-admin {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  justify-content: space-between;
+}
+
+.sub-menu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  min-width: 200px;
+  padding: 5px 0;
+  background-color: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
   /* máy tính bảng */
 @media (min-width: 768px) and (max-width: 1023px) {
     nav {
@@ -91,6 +180,17 @@ nav {
     nav .container_ul ul li {
       margin-bottom: 20px;
       padding: 10px;
+    }
+    .menu-admin #span{
+      display: none;
+    }
+    .menu-admin:hover {
+      background-color: #eeeeee;
+      color: #0056b3; /* Màu chữ khi rê chuột vào */
+    }
+    /* Sub-menu */
+    .sub-menu {
+      display: none;
     }
   }
   /* Mobile */
@@ -138,4 +238,3 @@ nav {
       width: 100%;
     }
   }
-  

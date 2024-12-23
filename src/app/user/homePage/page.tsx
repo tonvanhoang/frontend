@@ -61,11 +61,10 @@ export default function HomePage() {
     };
     fetchPosts();
   }, [user]);
-
   const addComment = async (e: React.FormEvent, postId: string) => {
     e.preventDefault();
     const newComment = {
-      comment,
+      comment:comment,
       idPost: postId,
       idAccount: user?._id,
     };
@@ -81,21 +80,22 @@ export default function HomePage() {
       setComment('');
       const resPostDetail = await fetch(`http://localhost:4000/post/postByID/${postId}`)
       const dataPost = await resPostDetail.json()
-      const newNoTi = {
-        owner:user?._id,
-        idAccount:dataPost.idAccount,
-        content:"Đã Bình luận bài viết của bạn"
+      if(user?._id !== dataPost.idAccount){
+        const newNoTi = {
+          idPost:dataPost._id,
+          owner:user?._id,
+          idAccount:dataPost.idAccount,
+          content:"Đã Bình luận bài viết của bạn"
+        }
+        const resNoti = await fetch(`http://localhost:4000/notification/addPost`,{
+          headers:{
+            'content-type':'application/json'
+  
+          },
+          method:'POST',
+          body:JSON.stringify(newNoTi)
+        })
       }
-      const resNoti = await fetch(`http://localhost:4000/notification/addPost`,{
-        headers:{
-          'content-type':'application/json'
-
-        },
-        method:'POST',
-        body:JSON.stringify(newNoTi)
-      })
-    } else {
-      alert('Thêm bình luận thất bại');
     }
   };
   // Xử lý sự kiện nhấn nút Next/Prev và cập nhật trạng thái

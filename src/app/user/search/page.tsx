@@ -19,8 +19,6 @@ export default function Search() {
   const [accounts, setAccounts] = useState<Account[]>([]); // State to store accounts
   const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
   const [filteredAccounts, setFilteredAccounts] = useState<Account[]>([]); // State for filtered results
-  const recentSearches = ['aaaaaaádasda', 'aaaaaaaádasd', 'aaaádadadasdsadaaaa']; // Tìm kiếm gần đây (có thể lấy từ state hoặc props)
-
   useEffect(() => {
     // Fetch all accounts from the API
     fetch('http://localhost:4000/account/allAccount')
@@ -66,22 +64,12 @@ export default function Search() {
               {filteredAccounts.length > 0 ? (
                 filteredAccounts.map((account, index) => (
                   <div key={index} className="lichsu">
-                    <Link href={`/user/profilePage/${account._id}`}>{account.firstName} {account.lastName}</Link>
+                    <Link className='' href={`/user/profilePage/${account._id}`}>{account.firstName} {account.lastName}</Link>
                   </div>
                 ))
               ) : (
                 searchTerm.trim() !== '' && <p>Không tìm thấy kết quả.</p>
               )}
-            </div>
-            <div>
-              <h6>Gần đây</h6>
-              {recentSearches.map((search, index) => (
-                <div key={index} className="lichsu">
-                  <a href="#">{search}</a>
-                  <i className="fa-solid fa-xmark"></i>
-                </div>
-              ))}
-              {/* Có thể thêm logic để xóa các tìm kiếm gần đây hoặc làm gì đó khác ở đây */}
             </div>
           </div>
         </div>
