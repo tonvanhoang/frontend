@@ -1,5 +1,16 @@
+import { useEffect, useState } from 'react'
 import '../suggestion/suggestion.css'
+import Link from 'next/link'
 export default function Suggestion(){
+  const [account,setAccount] = useState<any>([])
+  useEffect(()=>{
+    const fetchAccount = async ()=>{
+      const res = await fetch(`http://localhost:4000/account/allAccount`)
+      const data = await res.json()
+      setAccount(data)
+    }
+    fetchAccount()
+  },[])
     return(
         <>
         <div className="postRight my-5">
@@ -7,121 +18,29 @@ export default function Suggestion(){
             {/* <!-- title --> */}
             <div className="title d-flex justify-content-between">
               <span>Gợi ý cho bạn</span>
-              <a href="#">Xem tất cả</a>
+              <a href="#" className='d-none'>Xem tất cả</a>
             </div>
             <div className="imgtaikhoan">
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
+             {
+              account.map((acc:any)=>(
+                <div className="item1 d-flex justify-content-between">
+               <Link className='text-decoration-none' href={`/user/profilePage/${acc._id}`}>
+               <div className="d-flex">
                   <div className="img">
-                    <img src="../img/hoangton.jpg" alt="" />
+                    <img src={`/img/${acc.avata}`} alt="" />
                   </div>
                   <div className="tentaikhoan">
-                    <a href="#" className="d-block">hoanggggggg</a>
+                    <a href="#" className="d-block">{acc.firstName} {acc.lastName}</a>
                     <span>Gợi nhớ cho bạn</span>
                   </div>
                 </div>
+               </Link>
                 <div className="theodoi">
-                  <a href="#">Theo dõi</a>
+                  <a href="#" className='d-none'>Theo dõi</a>
                 </div>
               </div>
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="tentaikhoan">
-                    <a href="#" className="d-block">hoangton</a>
-                    <span>Gợi nhớ cho bạn</span>
-                  </div>
-                </div>
-                <div className="theodoi">
-                  <a href="#">Theo dõi</a>
-                </div>
-              </div>
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
-                  <div className="img">
-                    <img src="../img/hoangton2.jpg" alt="" />
-                  </div>
-                  <div className="tentaikhoan">
-                    <a href="#" className="d-block">tonvanhoang</a>
-                    <span>Gợi nhớ cho bạn</span>
-                  </div>
-                </div>
-                <div className="theodoi">
-                  <a href="#">Theo dõi</a>
-                </div>
-              </div>
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
-                  <div className="img">
-                    <img src="../img/hoangton3.jpg" alt="" />
-                  </div>
-                  <div className="tentaikhoan">
-                    <a href="#" className="d-block">vanhoang</a>
-                    <span>Gợi nhớ cho bạn</span>
-                  </div>
-                </div>
-                <div className="theodoi">
-                  <a href="#">Theo dõi</a>
-                </div>
-              </div>
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
-                  <div className="img">
-                    <img src="../img/hoangton4.jpg" alt="" />
-                  </div>
-                  <div className="tentaikhoan">
-                    <a href="#" className="d-block">hoang</a>
-                    <span>Gợi nhớ cho bạn</span>
-                  </div>
-                </div>
-                <div className="theodoi">
-                  <a href="#">Theo dõi</a>
-                </div>
-              </div>
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
-                  <div className="img">
-                    <img src="../img/hoangton3.jpg" alt="" />
-                  </div>
-                  <div className="tentaikhoan">
-                    <a href="#" className="d-block">Hoàng Tôn</a>
-                    <span>Gợi nhớ cho bạn</span>
-                  </div>
-                </div>
-                <div className="theodoi">
-                  <a href="#">Theo dõi</a>
-                </div>
-              </div>
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
-                  <div className="img">
-                    <img src="../img/hoangton.jpg" alt="" />
-                  </div>
-                  <div className="tentaikhoan">
-                    <a href="#" className="d-block">tonhoang</a>
-                    <span>Gợi nhớ cho bạn</span>
-                  </div>
-                </div>
-                <div className="theodoi">
-                  <a href="#">Theo dõi</a>
-                </div>
-              </div>
-              <div className="item1 d-flex justify-content-between">
-                <div className="d-flex">
-                  <div className="img">
-                    <img src="../img/hoangton1.jpg" alt="" />
-                  </div>
-                  <div className="tentaikhoan">
-                    <a href="#" className="d-block">hoang</a>
-                    <span>Gợi nhớ cho bạn</span>
-                  </div>
-                </div>
-                <div className="theodoi">
-                  <a href="#">Theo dõi</a>
-                </div>
-              </div>
+              ))
+             }
             </div>
           </div>
         </div>

@@ -8,7 +8,17 @@ interface Reel {
   title: string;
   content: string;
   dateReel: string;
-  idAccount: string;
+  idAccount: { _id: string; firstName: string; lastName: string; avata: string; }
+  likes: number;
+  likedBy: string[];
+  firstName: string;
+  lastName: string;
+  avata: string;
+}
+
+// Đảm bảo kiểu dữ liệu trong ReelItem props cũng khớp
+interface ReelItemProps {
+  reel: Reel;
 }
 
 const ReelContainer: React.FC = () => {
@@ -19,9 +29,18 @@ const ReelContainer: React.FC = () => {
     const fetchReels = async () => {
       try {
         const response = await fetch(`http://localhost:4000/reel/allReel`);
+        if (!response.ok) throw new Error("Failed to fetch reels");
         const data = await response.json();
-        console.log("Fetched data:", data);
-        setReels(Array.isArray(data) ? data : []);
+
+        // Sắp xếp reels theo thời gian mới nhất
+        const sortedReels = Array.isArray(data)
+          ? data.sort(
+              (a, b) =>
+                new Date(b.dateReel).getTime() - new Date(a.dateReel).getTime()
+            )
+          : [];
+
+        setReels(sortedReels);
       } catch (error) {
         console.error("Error fetching reels:", error);
       } finally {

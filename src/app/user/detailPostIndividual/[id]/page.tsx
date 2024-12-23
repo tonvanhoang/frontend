@@ -110,7 +110,7 @@ export default function DetailpostIndividual({ params }: { params: { id: string 
   const addComment = async (e: React.FormEvent, postId: string) => {
     e.preventDefault();
     const newComment = {
-      comment,
+      comment:comment,
       idPost: postId,
       idAccount: user?._id,
     };

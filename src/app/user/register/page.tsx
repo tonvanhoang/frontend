@@ -1,3 +1,5 @@
+
+// Define types for form values
 'use client';
 import '../register/register.css';
 import React from 'react';
@@ -5,13 +7,13 @@ import Link from 'next/link';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-// Define types for form values
 interface FormValues {
   firstName: string;
   lastName: string;
   phoneNumber: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 const Register: React.FC = () => {
@@ -22,6 +24,7 @@ const Register: React.FC = () => {
       phoneNumber: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
     validationSchema: Yup.object({
       firstName: Yup.string()
@@ -37,8 +40,14 @@ const Register: React.FC = () => {
         .required('Vui lòng nhập số điện thoại'),
       email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
       password: Yup.string()
-        .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/, 'Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ, số và ký tự đặc biệt')
+        .matches(
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/,
+          'Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ, số và ký tự đặc biệt'
+        )
         .required('Vui lòng nhập mật khẩu'),
+        confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), undefined], 'Mật khẩu không khớp')
+        .required('Vui lòng xác nhận mật khẩu'),
     }),
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
@@ -53,14 +62,13 @@ const Register: React.FC = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          if (response.status === 400 && errorData.message === "Email đã tồn tại") {
+          if (response.status === 400 && errorData.message === 'Email đã tồn tại') {
             setFieldError('email', 'Email đã tồn tại');
           } else {
             throw new Error(errorData.message || 'Đăng ký thất bại');
           }
         } else {
           alert('Đăng ký thành công!');
-          location.href = "/user/login"
         }
       } catch (error) {
         console.error('Registration error:', error);
@@ -77,7 +85,6 @@ const Register: React.FC = () => {
         <div className="formregister p-0">
           <div className="item-1 m-auto">
             <h2 className="text-center my-4">Renet</h2>
-
             <form onSubmit={formik.handleSubmit}>
               <div className="mb-3 m-auto">
                 <input
@@ -93,7 +100,6 @@ const Register: React.FC = () => {
                   <span className="text-danger">{formik.errors.firstName}</span>
                 ) : null}
               </div>
-
               <div className="mb-3 m-auto">
                 <input
                   type="text"
@@ -108,7 +114,6 @@ const Register: React.FC = () => {
                   <span className="text-danger">{formik.errors.lastName}</span>
                 ) : null}
               </div>
-
               <div className="mb-3 m-auto">
                 <input
                   type="text"
@@ -123,7 +128,6 @@ const Register: React.FC = () => {
                   <span className="text-danger">{formik.errors.phoneNumber}</span>
                 ) : null}
               </div>
-
               <div className="mb-3 m-auto">
                 <input
                   type="email"
@@ -153,10 +157,31 @@ const Register: React.FC = () => {
                   <span className="text-danger">{formik.errors.password}</span>
                 ) : null}
               </div>
+              <div className="mb-3 m-auto">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Xác nhận mật khẩu..."
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.confirmPassword}
+                  className={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'error' : ''}
+                />
+                {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+                  <span className="text-danger">{formik.errors.confirmPassword}</span>
+                ) : null}
+              </div>
 
               <div className="text-center btnLogin">
-                <button type="submit" disabled={formik.isSubmitting}>
-          Đăng Ký
+                <button
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                  style={{
+                    color: 'white',         
+                    fontWeight: 'bold',     
+                  }}
+                >
+                  Đăng Ký
                 </button>
               </div>
             </form>
@@ -178,5 +203,4 @@ const Register: React.FC = () => {
     </div>
   );
 }
-
 export default Register;

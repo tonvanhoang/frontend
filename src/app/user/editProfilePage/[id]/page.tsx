@@ -27,7 +27,7 @@ export default function EditProfile({params}:{params:{id:string}}){
             <div className="img">
               <img src={`/img/${account.avata}`} alt="Profile Picture" />
               <div className="addAvatar">
-                <i className="bi bi-pencil-square"></i>
+                <Link href={`/components/editAvata/${account._id}`}><i className="bi bi-pencil-square"></i></Link>
               </div>
             </div>
             <div>
@@ -55,7 +55,7 @@ export default function EditProfile({params}:{params:{id:string}}){
                 <label >Ngày sinh</label>
                 <div className="content">
                   <p>{account.birth}</p>
-                 <i className="bi bi-pencil-square"></i>
+                 <Link href={`/components/editBirtday/${account._id}`}><i className="bi bi-pencil-square"></i></Link>
                 </div>             
                </div>
               <div className="form-group">
@@ -96,9 +96,9 @@ export default function EditProfile({params}:{params:{id:string}}){
                  <Link href={`/components/editPhone/${account._id}`}> <i className="bi bi-pencil-square"></i></Link>
                 </div>
               </div>
-              <div className="form-group btn">
+              {/* <div className="form-group btn">
                 <button className="btndelete">Xóa tài khoản</button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

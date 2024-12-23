@@ -231,3 +231,90 @@
 
     }
 }
+/* Nút "Trợ Giúp" nằm bên trái "Quên mật khẩu" */
+#loginPage .container_con .container_right .item-1 .quenmatkhau {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#loginPage .container_con .container_right .item-1 .quenmatkhau a,
+#loginPage .container_con .container_right .item-1 .quenmatkhau button {
+    font-size: 14px;
+    color: black;
+    font-weight: 600;
+}
+
+#loginPage .container_con .container_right .item-1 .quenmatkhau button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#loginPage .container_con .container_right .item-1 .quenmatkhau button:hover,
+#loginPage .container_con .container_right .item-1 .quenmatkhau a:hover {
+    text-decoration: underline;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.modal .close:hover {
+    color: #e3342f;
+}
+
+.modal form input,
+.modal form textarea,
+.modal form button {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.modal form input[type="file"] {
+    padding: 8px;
+}
+
+.modal form button[type="submit"] {
+    background-color: #535353;
+    color: white;
+    padding: 12px;
+}
+
+.modal form button[type="submit"]:hover {
+    background-color: #7d7d7d;
+}
+

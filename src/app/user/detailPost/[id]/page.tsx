@@ -31,7 +31,8 @@ export default function DetailPost({ params }: { params: { id: string } }) {
 
   // Nếu chưa có dữ liệu thì hiển thị loading
   if (!detailPost) {
-    return <div>Loading...</div>;
+    return <div style={{fontSize:'30px',margin:'100px auto'}}>Bài viết không tồn tại</div>;
+    location.href = '/user/homePage'
   }
 
   return (
